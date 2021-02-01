@@ -1,0 +1,121 @@
+server:
+  port: 8080
+
+guns:
+  swagger-open: false              #是否开启swagger (true/false)
+  kaptcha-open: false             #是否开启登录时验证码 (true/false)
+  #  file-upload-path: d:/tmp     #文件上传目录(不配置的话为java.io.tmpdir目录)
+  spring-session-open: false      #是否开启spring session,如果是多机环境需要开启(true/false)
+  session-invalidate-time: 1800     #session失效时间(只在单机环境下生效，多机环境在SpringSessionConfig类中配置) 单位：秒
+  session-validation-interval: 900  #多久检测一次失效的session(只在单机环境下生效) 单位：秒
+  flowable-fund-apply-process-definition: budgetApplyProcess #设置预算申请flowable流程的id
+  flowable-reimburse-process-definition: reimburseProcess #设置预算申请flowable流程的id
+  flowable-purchase-process-definition: purchaseApplyProcess #设置费用申请flowable流程的id
+  flowable-fee-process-definition: feeApplyProcess
+  flowable-payment-process-definition: paymentApplyProcess
+  flowable-skip-target: finance_approve #设置预算申请flowable跳转的target
+  flowable-finance-position: finance #设置财务的id
+  oa-url: http://183.66.231.86:9000/oa
+
+beetl:
+  resource-auto-check: true       #热加载beetl模板，开发时候用
+
+spring:
+  profiles:
+    active: @spring.active@
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      prefix: /WEB-INF/view
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: static/**,WEB-INF/view/**
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+  main:
+    allow-bean-definition-overriding: true
+  mail:
+    host: smtp.exmail.qq.com
+    username: oa@bjtce.com
+    password: MgvyGwPH8LvihF96
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+    default-encoding: UTF-8
+    port: 465
+
+mybatis-plus:
+  typeAliasesPackage: com.tce.oa.modular.system.model
+  global-config:
+    db-column-underline: false
+  mapper-locations: classpath*:com/tce/oa/**/mapping/*.xml
+
+log:
+  path: guns-logs
+flowable:
+  async-executor-activate: false
+  process:
+    definition-cache-limit: 100
+  database-schema-update: true
+
+---
+
+spring:
+  profiles: local
+  datasource:
+    url: jdbc:mysql://192.168.2.223:3306/oa_tce?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: 123456
+    filters: wall,mergeStat
+
+#多数据源情况的配置
+guns:
+  muti-datasource:
+    open: false
+    url: jdbc:mysql://127.0.0.1:3306/guns_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: root
+    dataSourceNames:
+    - dataSourceGuns
+    - dataSourceBiz
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/oa_tce?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: 123456
+    filters: wall,mergeStat
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://192.168.2.223:3306/oa_tce_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: 123456
+    filters: wall,mergeStat
+
+---
+
+spring:
+  profiles: produce
+  datasource:
+    url: jdbc:mysql://192.168.2.223:3306/oa_tce_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
+    password: 123456
+    filters: wall,mergeStat
+

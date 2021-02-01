@@ -1,0 +1,82 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>报销查询</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#SelectCon id="reimburseType" name="报销类型" >
+                                    <option value="0">全部</option>
+                                    <option value="1">差旅报销</option>
+                                    <option value="2">费用报销</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">部门
+                                        </button>
+                                    </div>
+                                    <input class="form-control" id="departs" name="departs" type="text" readonly="readonly" onclick="Reimburse.showDeptSelectTree(); return false;" style="background-color: #ffffff !important;">
+                                    <input class="form-control" type="hidden" id="deptid" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="beginTime" name="开始日期" isTime="false"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <#TimeCon id="endTime" name="结束日期" isTime="false"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#SelectCon id="reimburseState" name="申请状态" >
+                                    <option value="">全部</option>
+                                    <option value="1">待提交申请</option>
+                                    <option value="3">待部门负责人审核</option>
+                                    <option value="4">待总裁助理审核</option>
+                                    <option value="5">待财务审核</option>
+                                    <option value="6">待副总裁审核</option>
+                                    <option value="7">待总裁审核</option>
+                                    <option value="8">审核未通过</option>
+                                    <option value="9">审核通过</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="reimbursePerson" name="报销人" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="Reimburse.search()" space="true"/>
+                                <#button name="重置" icon="fa-trash" clickFun="Reimburse.resetSearch()" space="true"/>
+                                <#button name="导出" icon="fa-edit" clickFun="Reimburse.export()" space="true"/>
+                            </div>
+                        </div>
+                        <!-- 这是部门选择的下拉框 -->
+                        <div id="menuContent" class="menuContent"
+                             style="display: none; position: absolute; z-index: 200;">
+                            <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+                        </div>
+                        <#table id="reimburseTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/reimburse/reimburse.js"></script>
+<script>
+    laydate.render({
+        elem: '#beginTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+</script>
+@}

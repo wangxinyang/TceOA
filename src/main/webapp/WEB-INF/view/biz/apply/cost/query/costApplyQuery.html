@@ -1,0 +1,85 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>费用申请查询</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#SelectCon id="costType" name="申请类型" >
+                                    <option value="0">全部</option>
+                                    <option value="1">采购申请</option>
+                                    <option value="2">资金申请</option>
+                                    <option value="3">付款申请</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="costState" name="申请状态" >
+                                    <option value="">全部</option>
+                                    <option value="1">待提交申请</option>
+                                    <option value="3">待部门负责人审核</option>
+                                    <option value="4">待总裁助理审核</option>
+                                    <option value="5">待财务审核</option>
+                                    <option value="6">待副总裁审核</option>
+                                    <option value="7">待总裁审核</option>
+                                    <option value="8">审核未通过</option>
+                                    <option value="9">审核通过</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-3">
+                                <#SelectCon id="costPay" name="是否付款" >
+                                    <option value="">全部</option>
+                                    <option value="1">未付款</option>
+                                    <option value="2">已付款</option>
+                                </#SelectCon>
+                            </div>
+                         </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="costPerson" name="申请人" />
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <#TimeCon id="beginTime" name="申请开始日期" isTime="false"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <#TimeCon id="endTime" name="申请结束日期" isTime="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
+                             <div class="col-sm-6">
+                                 <div class="row">
+                                     <div class="col-sm-6">
+                                         <#button name="搜索" icon="fa-search" clickFun="CostApplyQuery.search()"/>
+                                         <#button name="重置" icon="fa-trash" clickFun="CostApplyQuery.resetSearch()" space="true"/>
+                                         @if(shiro.hasPermission("/cost/apply/pay")){
+                                         <#button name="已付款" icon="fa-money" clickFun="CostApplyQuery.pay()" space="true"/>
+                                         @}
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                        <#table id="CostApplyQueryTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/cost/query/costApplyQuery.js"></script>
+<script>
+    laydate.render({
+        elem: '#beginTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+</script>
+@}

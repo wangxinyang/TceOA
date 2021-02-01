@@ -1,0 +1,7 @@
+/*自定义的css样式*/
+.form-group.required .control-label:before{
+    color: red;
+    content: "*";
+    position: absolute;
+    margin-left: -15px;
+}

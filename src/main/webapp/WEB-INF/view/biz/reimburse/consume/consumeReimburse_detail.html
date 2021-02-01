@@ -1,0 +1,86 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="consumeReimburseForm">
+            <input type="hidden" id="id" value="">
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地区</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${locationName}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">部门</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${deptname}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-bordered" id="para_table">
+                    <tr>
+                        <th style="text-align:center">科目</th>
+                        <th style="text-align:center">项目名称</th>
+                        <th style="text-align:center">项目编号</th>
+                        <th style="text-align:center">资金用途</th>
+                        <th style="text-align:center">报销金额(元)</th>
+                        <th style="text-align:center">关联采购申请费用申请单号</th>
+                    </tr>
+                    @for(item in consumeDetailVoList){
+                    <tr class="consumeContent">
+                        <td title='${item.subjectname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.subjectname}
+                        </td>
+                        <td title='${item.projectname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.projectname}
+                        </td>
+                        <td title='${item.code}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.code}
+                        </td>
+                        <td title='${item.cashuse}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.cashuse}
+                        </td>
+                        <td title='${item.cash}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.cash}
+                        </td>
+                        <td title='${item.reqno}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.reqno}
+                        </td>
+                        @}
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-6 b-r">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">预借现金(元)</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" id="applycash" name="applycash" value="${item.applycash}" readonly="readonly" onblur="ConsumeReimburseInfoDlg.countAdjustCash();return false;"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <#input id="adjustcash" name="退/补金额(元)" readonly="readonly" value="${item.adjustcash}" underline="true"/>
+                <#input id="totalfee" name="财务审批" readonly="readonly" value="${item.cashernote}" underline="true"/>
+                <#input id="totalfee" name="副总经理审批" readonly="readonly" value="${item.deputynote}" underline="true"/>
+            </div>
+            <div class="col-sm-6">
+                <#input id="totalfee" name="小计(元)" readonly="readonly" value="${item.totalfee}" underline="true"/>
+                <#input id="upperfee" name="金额大写" readonly="readonly" value="${item.upperfee}" underline="true"/>
+                <#input id="totalfee" name="部门负责人审批" readonly="readonly" value="${item.leadernote}" underline="true"/>
+                <#input id="totalfee" name="总经理审批" readonly="readonly" value="${item.managernote}" underline="true"/>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ConsumeReimburseInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/reimburse/consume/consumeReimburse_info.js"></script>
+@}

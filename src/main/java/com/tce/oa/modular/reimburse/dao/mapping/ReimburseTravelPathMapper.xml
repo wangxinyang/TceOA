@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.reimburse.dao.ReimburseTravelPathMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.reimburse.model.ReimburseTravelPath">
+        <id column="id" property="id" />
+        <result column="rtid" property="rtid" />
+        <result column="fromtime" property="fromtime" />
+        <result column="fromlocation" property="fromlocation" />
+        <result column="totime" property="totime" />
+        <result column="tolocation" property="tolocation" />
+        <result column="target" property="target" />
+        <result column="createtime" property="createtime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, rtid, fromtime, fromlocation, totime, tolocation, target, createtime
+    </sql>
+
+    <select id="listByAid" resultType="com.tce.oa.modular.reimburse.model.ReimburseTravelPath">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_reimburse_travel_path where rtid = #{aid} order by id asc
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.reimburse.dao.ReimburseConsumeDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.reimburse.model.ReimburseConsumeDetail">
+        <id column="id" property="id" />
+        <result column="rcid" property="rcid" />
+        <result column="subjectid" property="subjectid" />
+        <result column="projectid" property="projectid" />
+        <result column="cashuse" property="cashuse" />
+        <result column="cash" property="cash" />
+        <result column="reqno" property="reqno" />
+        <result column="createtime" property="createtime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, rcid, subjectid, projectid, cashuse, cash, reqno,  createtime
+    </sql>
+
+    <select id="listByRcId" resultType="com.tce.oa.modular.reimburse.model.ReimburseConsumeDetail">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_reimburse_consume_detail where rcid = #{id} order by id asc
+    </select>
+</mapper>

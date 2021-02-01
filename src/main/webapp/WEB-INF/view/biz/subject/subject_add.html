@@ -1,0 +1,39 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="subjectInfoForm">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="subject" name="科目" underline="true"/>
+                    <#input id="note" name="说明"/>
+                </div>
+
+                <div class="col-sm-6">
+                    <#input id="num" name="排序" underline="true"/>
+                    <#input id="pName" name="上级科目" underline="true" readonly="readonly" hidden="pid"
+                    clickFun="SubjectInfoDlg.showSubjectSelectTree(); return false;"
+                    style="background-color: #ffffff !important;"/>
+                </div>
+            </div>
+
+            <!-- 父级科目选择的下拉框 -->
+            <div id="menuContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="parentSubjectTree" class="ztree tree-box" style="width: 249px !important;"></ul>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SubjectInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SubjectInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/subject/subject_info.js"></script>
+@}

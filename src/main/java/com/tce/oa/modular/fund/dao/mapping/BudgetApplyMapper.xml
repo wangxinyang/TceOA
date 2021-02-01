@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.fund.dao.BudgetApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.fund.model.BudgetApply">
+        <id column="id" property="id" />
+        <result column="reqno" property="reqno" />
+        <result column="deptid" property="deptid" />
+        <result column="location" property="location" />
+        <result column="money" property="money" />
+        <result column="createtime" property="createtime" />
+        <result column="type" property="type" />
+        <result column="state" property="state" />
+        <result column="userid" property="userid" />
+        <result column="processId" property="processId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, deptid, reqno, location, money, createtime, type, state, userid, processId
+    </sql>
+    <select id="queryCanAdd" resultType="com.tce.oa.modular.fund.model.BudgetApply">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_fund_apply where date_format(createtime,'%Y-%m')=date_format(now(),'%Y-%m')
+        and userid = #{userid}
+    </select>
+    <select id="queryByProcessId" resultType="com.tce.oa.modular.fund.model.BudgetApply">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_fund_apply where processId = #{processId}
+    </select>
+    <select id="queryApplys" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_fund_apply where 1 = 1
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        <if test="applyType != null and applyType != ''">
+            and type = #{applyType}
+        </if>
+        order by createtime DESC
+    </select>
+    <select id="queryApplysCqForExport" resultType="java.lang.Integer">
+        select id
+        from biz_fund_apply where state = 9 and location = 1
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+    </select>
+    <select id="queryApplysBjForExport" resultType="java.lang.Integer">
+        select id
+        from biz_fund_apply where state = 9 and location = 2
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+    </select>
+</mapper>

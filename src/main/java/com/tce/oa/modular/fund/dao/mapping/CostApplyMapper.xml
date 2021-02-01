@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.fund.dao.CostApplyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.fund.model.CostApply">
+        <id column="id" property="id" />
+        <result column="reqno" property="reqno" />
+        <result column="deptid" property="deptid" />
+        <result column="projectid" property="projectid" />
+        <result column="location" property="location" />
+        <result column="applytime" property="applytime" />
+        <result column="use" property="use" />
+        <result column="type" property="type" />
+        <result column="totalfee" property="totalfee" />
+        <result column="countfee" property="countfee" />
+        <result column="receivingunit" property="receivingunit" />
+        <result column="bank" property="bank" />
+        <result column="account" property="account" />
+        <result column="deadline" property="deadline" />
+        <result column="reason" property="reason" />
+        <result column="price" property="price" />
+        <result column="upperfee" property="upperfee" />
+        <result column="createtime" property="createtime" />
+        <result column="state" property="state" />
+        <result column="userid" property="userid" />
+        <result column="processId" property="processId" />
+        <result column="assignee" property="assignee" />
+        <result column="leadernote" property="leadernote" />
+        <result column="leadertime" property="leadertime" />
+        <result column="assistantnote" property="assistantnote" />
+        <result column="assistantime" property="assistantime" />
+        <result column="cashernote" property="cashernote" />
+        <result column="cashertime" property="cashertime" />
+        <result column="deputynote" property="deputynote" />
+        <result column="deputytime" property="deputytime" />
+        <result column="managernote" property="managernote" />
+        <result column="managertime" property="managertime" />
+        <result column="pay" property="pay" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, reqno, deptid, projectid, location, applytime, use, totalfee, countfee, type, receivingunit, bank, account,
+        deadline, reason, price, upperfee, reatetime, state, userid, processId, assignee, leadernote, leadertime,
+        assistantnote, assistantime, cashernote, cashertime, deputynote, deputytime, managernote, managertime
+    </sql>
+    <select id="queryCostApply" resultType="map" parameterType="com.baomidou.mybatisplus.plugins.Page">
+        select * from biz_fund_cost_apply where 1 = 1
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        <if test="costType != null and costType != ''">
+            and type = #{costType}
+        </if>
+        <if test="costState != null and costState != ''">
+            and state = #{costState}
+        </if>
+        <if test="costPay != null and costPay != ''">
+            and pay = #{costPay}
+        </if>
+        <if test="ids != null">
+            and userid in
+            <foreach collection="ids" item="userid" open="(" close=")" separator=",">
+                #{userid}
+            </foreach>
+        </if>
+        order by createtime DESC
+    </select>
+</mapper>

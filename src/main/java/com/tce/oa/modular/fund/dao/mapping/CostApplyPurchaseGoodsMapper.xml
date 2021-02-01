@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.fund.dao.CostApplyPurchaseGoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.fund.model.CostApplyPurchaseGoods">
+        <id column="id" property="id" />
+        <result column="aid" property="aid" />
+        <result column="goods" property="goods" />
+        <result column="type" property="type" />
+        <result column="num" property="num" />
+        <result column="price" property="price" />
+        <result column="totalfee" property="totalfee" />
+        <result column="supplier" property="supplier" />
+        <result column="quotationunit" property="quotationunit" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, aid, goods, type, num, price, totalfee, supplier, quotationunit, note
+    </sql>
+    <select id="listByPurId" resultType="com.tce.oa.modular.fund.model.CostApplyPurchaseGoods">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_fund_cost_purchase_goods where aid = #{id} order by id asc
+    </select>
+</mapper>

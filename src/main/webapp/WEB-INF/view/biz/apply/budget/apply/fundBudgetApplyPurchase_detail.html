@@ -1,0 +1,87 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="salesInfoForm">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地区:</label>
+                        <label class="col-sm-3 control-label">
+                            ${locationName}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">部门:</label>
+                        <label class="col-sm-3 control-label">
+                            ${deptname}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-bordered" id="para_table">
+                    <tr>
+                        <th style="text-align:center">科目</th>
+                        <th style="text-align:center">项目名称</th>
+                        <th style="text-align:center">采购内容</th>
+                        <th style="text-align:center">单价</th>
+                        <th style="text-align:center">数量</th>
+                        <th style="text-align:center">预算金额</th>
+                        <th style="text-align:center">资金使用用途说明及核算标准</th>
+                        <th style="text-align:center">总助审批</th>
+                        <th style="text-align:center">副总审核金额</th>
+                        <th style="text-align:center">总经理终审金额</th>
+                        <th style="text-align:center">备注</th>
+                    </tr>
+                    @for(item in fundApplys){
+                    <tr>
+                        <td title='${item.subjectname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.subjectname}
+                        </td>
+                        <td title='${item.projectname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.projectname}
+                        </td>
+                        <td title='${item.purchaseitem}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.purchaseitem}
+                        </td>
+                        <td title='${item.unitprice}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.unitprice}
+                        </td>
+                        <td title='${item.num}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.num}
+                        </td>
+                        <td title='${item.totalfee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.totalfee}
+                        </td>
+                        <td title='${item.description}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.description}
+                        </td>
+                        <td title='${item.assistantnote}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.assistantnote}
+                        </td>
+                        <td title='${item.subapprovefee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.subapprovefee}
+                        </td>
+                        <td title='${item.approvefee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.approvefee}
+                        </td>
+                        <td title='${item.note}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${item.note}
+                        </td>
+                    </tr>
+                    @}
+                </table>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="FundBudgetApplyPurchaseInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/budget/apply/fundBudgetApplyPurchase_info.js"></script>
+@}

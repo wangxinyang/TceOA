@@ -1,0 +1,149 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="processForm">
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="taskId" value="${taskId}">
+            <input type="hidden" id="taskUser" value="${taskUser}">
+            <input type="hidden" id="locationValue" value="${item.location}">
+            <input type="hidden" id="taskDefinitionKey" value="${taskDefinitionKey}">
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地区</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${locationName}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">项目名称</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${projectName}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="receivingunit" name="收款单位(员工姓名)" readonly="readonly" underline="true" value="${item.receivingunit}"/>
+                    <#input id="account" name="账号" underline="true" readonly="readonly" value="${item.account}"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请日期</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="applytime" name="applytime" value="${item.applytime}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="col-sm-6">
+                    <#input name="部门" id="departs" readonly="readonly" hidden="deptid"
+                    clickFun="CostApplyInfoDlg.showDeptSelectTree(); return false;"
+                    style="background-color: #ffffff !important;" underline="true"
+                    value="${deptname}" hiddenValue="${item.deptid}"/>
+                    <#input id="code" name="项目编号" readonly="readonly" underline="true" value="${code}"/>
+                    <#input id="bank" name="开户行" readonly="readonly" underline="true" value="${item.bank}"/>
+                    <#input id="use" name="用途" underline="true"  value="${item.use}" readonly="readonly"/>
+                    <#input id="countfee" name="资金总价(元)" underline="true" readonly="readonly" value="${item.totalfee}"/>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table table-bordered" id="para_table">
+                        <tr>
+                            <th style="text-align:center">费用名称</th>
+                            <th style="text-align:center">摘要</th>
+                            <th style="text-align:center">预计金额(元)</th>
+                            <th style="text-align:center">备注</th>
+                        </tr>
+                        @for(var i=0;i<costFeeDetailList.~size;i++){
+                        <tr class="feeContent" id="0">
+                            <input type="hidden" id="id" value="${costFeeDetailList[i].id}">
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="name" name="name0" value="${costFeeDetailList[i].name}" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="outlaypro" name="outlaypro0" value="${costFeeDetailList[i].outlaypro}" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="price" name="price0" value="${costFeeDetailList[i].price}" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="note" name="note0" value="${costFeeDetailList[i].note}" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @}
+                    </table>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">部门负责人(${leaderapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "leader_approve"){
+                            <input class="form-control" type="text" id="leadernote" name="leadernote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="leadernote" value="${item.leadernote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">副总经理(${deputyapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "deputyManager_approve"){
+                            <input class="form-control" type="text" id="deputynote" name="deputynote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="deputynote" value="${item.deputynote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">财务(${casherapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "finance_approve"){
+                            <input class="form-control" type="text" id="cashernote" name="cashernote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="cashernote" value="${item.cashernote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">总经理(${managerapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "manager_approve"){
+                            <input class="form-control" type="text" id="managernote" name="managernote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="managernote" value="${item.managernote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="同意" id="ensure" icon="fa-check" clickFun="ProcessInfoDlg.pass()"/>
+                    <#button btnCss="danger" name="驳回" id="ensure" icon="fa-eraser" clickFun="ProcessInfoDlg.unPass()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ProcessInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/cost/process/process_info.js"></script>
+@}

@@ -1,0 +1,117 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="processInfoForm">
+            <div class="row">
+                <input type="hidden" id="taskId" value="${taskId}">
+                <input type="hidden" id="location" value="${location}">
+                <input type="hidden" id="fundApplyId" value="${fundApplyId}">
+                <input type="hidden" id="type" value="${type}">
+                <input type="hidden" id="taskDefinitionKey" value="${taskDefinitionKey}">
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地区</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${locationName}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">部门</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${deptname}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-bordered" id="para_table">
+                    <tr>
+                        <th style="text-align:center">科目</th>
+                        <th style="text-align:center">项目名称</th>
+                        <th style="text-align:center">员工姓名</th>
+                        <th style="text-align:center">出差目的地</th>
+                        <th style="text-align:center">预计出差天数</th>
+                        <th style="text-align:center">长途交通费</th>
+                        <th style="text-align:center">站点（机场、高铁等）<br/>往返交通费</th>
+                        <th style="text-align:center">住宿费</th>
+                        <th style="text-align:center">补贴</th>
+                        <th style="text-align:center">预算金额</th>
+                        <th style="text-align:center">资金使用用途说明及核算标准</th>
+                        <th style="text-align:center">总助(${assistantapprove})审批</th>
+                        <th style="text-align:center">副总(${deputyapprove})审核金额</th>
+                        <th style="text-align:center">总经理(${managerapprove})终审金额</th>
+                        <th style="text-align:center">备注</th>
+                    </tr>
+                    @for(var i=0;i<fundApplys.~size;i++){
+                    <tr>
+                        <input type="hidden" id="id" value="${fundApplys[i].id}">
+                        <td title='${fundApplys[i].subjectname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].subjectname}</td>
+                        <td title='${fundApplys[i].projectname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].projectname}</td>
+                        <td title='${fundApplys[i].empname}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].empname}</td>
+                        <td title='${fundApplys[i].traveldest}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].traveldest}</td>
+                        <td title='${fundApplys[i].traveldays}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].traveldays}</td>
+                        <td title='${fundApplys[i].travelfee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].travelfee}</td>
+                        <td title='${fundApplys[i].trafficfee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].trafficfee}</td>
+                        <td title='${fundApplys[i].accommodationfee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].accommodationfee}</td>
+                        <td title='${fundApplys[i].subsidy}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">${fundApplys[i].subsidy}</td>
+                        <td title='${fundApplys[i].totalfee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${fundApplys[i].totalfee}
+                        </td>
+                        <td title='${fundApplys[i].description}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            ${fundApplys[i].description}
+                        </td>
+                        <td title='${fundApplys[i].assistantnote}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            @if(assignee == 'assistant'){
+                                <input class="form-control" id="assistantnote" name="assistantnote${i}" type="text" value="${fundApplys[i].assistantnote}">
+                            @} else {
+                                ${fundApplys[i].assistantnote}
+                            @}
+                        </td>
+                        <td title='${fundApplys[i].subapprovefee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            @if(assignee == 'deputy'){
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="subapprovefee" name="subapprovefee${i}" type="text" value="${fundApplys[i].subapprovefee}">
+                                </div>
+                            </div>
+                            @} else {
+                                ${fundApplys[i].subapprovefee}
+                            @}
+                        </td>
+                        <td title='${fundApplys[i].approvefee}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            @if(assignee == 'manager'){
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="approvefee" name="approvefee${i}" type="text" value="${fundApplys[i].approvefee}">
+                                </div>
+                            </div>
+                            @} else {
+                                ${fundApplys[i].approvefee}
+                            @}
+                        </td>
+                        <td title='${fundApplys[i].note}' class="col-md-6" style="vertical-align: middle !important;text-align: center;">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="note" type="text" value="${fundApplys[i].note}">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    @}
+                </table>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="同意" id="ensure" icon="fa-check" clickFun="FundProcessInfoDlg.pass()"/>
+                    <#button btnCss="danger" name="驳回" id="ensure" icon="fa-eraser" clickFun="FundProcessInfoDlg.unPass()"/>
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="FundProcessInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/budget/process/process_info.js"></script>
+@}

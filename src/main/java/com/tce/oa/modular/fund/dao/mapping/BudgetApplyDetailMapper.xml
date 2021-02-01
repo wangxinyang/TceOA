@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.fund.dao.BudgetApplyDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.fund.model.BudgetApplyDetail">
+        <id column="id" property="id" />
+        <result column="aid" property="aid" />
+        <result column="subjectid" property="subjectid" />
+        <result column="projectid" property="projectid" />
+        <result column="customername" property="customername" />
+        <result column="empname" property="empname" />
+        <result column="traveldest" property="traveldest" />
+        <result column="traveldays" property="traveldays" />
+        <result column="travelfee" property="travelfee" />
+        <result column="trafficfee" property="trafficfee" />
+        <result column="accommodationfee" property="accommodationfee" />
+        <result column="subsidy" property="subsidy" />
+        <result column="purchaseitem" property="purchaseitem" />
+        <result column="unitprice" property="unitprice" />
+        <result column="num" property="num" />
+        <result column="expenseitem" property="expenseitem" />
+        <result column="totalfee" property="totalfee" />
+        <result column="description" property="description" />
+        <result column="createtime" property="createtime" />
+        <result column="subapprovefee" property="subapprovefee" />
+        <result column="approvefee" property="approvefee" />
+        <result column="note" property="note" />
+        <result column="assistantnote" property="assistantnote" />
+        <result column="deputynote" property="deputynote" />
+        <result column="managernote" property="managernote" />
+        <result column="actualfee" property="actualfee" />
+        <result column="ratio" property="ratio" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, aid,  subjectid, projectid, customername, empname, traveldest, traveldays, travelfee, trafficfee, accommodationfee,
+        subsidy, purchaseitem, unitprice, num, expenseitem, totalfee, description,
+        createtime, subapprovefee, approvefee, note, assistantnote, deputynote, managernote, actualfee, ratio
+    </sql>
+    <select id="listByAid" resultType="com.tce.oa.modular.fund.model.BudgetApplyDetail">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_fund_apply_detail where aid = #{aid} order by id asc
+    </select>
+    <select id="queryDetailByIds" resultType="com.tce.oa.modular.fund.model.BudgetApplyDetail">
+        select
+        subjectid, totalfee, subapprovefee, approvefee, actualfee
+        from biz_fund_apply_detail where aid in
+        <foreach collection="idList" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

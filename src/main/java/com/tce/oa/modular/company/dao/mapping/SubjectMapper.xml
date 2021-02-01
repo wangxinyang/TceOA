@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.company.dao.SubjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.company.model.Subject">
+        <id column="id" property="id" />
+        <result column="num" property="num"/>
+        <result column="pid" property="pid"/>
+        <result column="pids" property="pids"/>
+        <result column="subject" property="subject" />
+        <result column="note" property="note" />
+        <result column="createtime" property="createtime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, num, pid, pids, subject, note, departs, createtime
+    </sql>
+    <select id="tree" resultType="com.tce.oa.core.common.node.ZTreeNode">
+        select id, pid as pId, subject as name,
+		(
+		CASE
+		WHEN (pId = 0 OR pId IS NULL) THEN
+		'true'
+		ELSE
+		'false'
+		END
+		) as isOpen from biz_fund_subject
+    </select>
+    <select id="list" resultType="map">
+        select * from biz_fund_subject
+        <if test="condition != null and condition != ''">
+            where subject like CONCAT('%',#{condition},'%')
+        </if>
+        order by num ASC
+    </select>
+    <select id="queryIdByExport" resultType="java.lang.Integer">
+        select id from biz_fund_subject
+        where <![CDATA[pid <> 0]]>
+        order by id ASC
+    </select>
+</mapper>

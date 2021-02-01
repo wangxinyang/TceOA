@@ -1,0 +1,223 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="processInfoForm">
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="同意" id="ensure" icon="fa-check" clickFun="ProcessInfoDlg.pass()"/>
+                    <#button btnCss="danger" name="驳回" id="ensure" icon="fa-eraser" clickFun="ProcessInfoDlg.unPass()"/>
+                    <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="ProcessInfoDlg.goBack()"/>
+                </div>
+            </div>
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="taskId" value="${taskId}">
+            <input type="hidden" id="taskUserPosition" value="${taskUserPosition}">
+            <input type="hidden" id="locationValue" value="${item.location}">
+            <input type="hidden" id="taskDefinitionKey" value="${taskDefinitionKey}">
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地区</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${locationName}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">项目名称</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${projectName}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="travelreason" value="${item.travelreason}" readonly="readonly" name="出差事由"/>
+                </div>
+                <div class="col-sm-6">
+                    <#input name="部门" id="departs" readonly="readonly" hidden="deptid"
+                    clickFun="TravelReimburseInfoDlg.showDeptSelectTree(); return false;"
+                    style="background-color: #ffffff !important;" underline="true" value="${deptName}" hiddenValue="${item.deptid}"/>
+                    <#input id="code" name="项目编号" value="${code}" readonly="readonly" underline="true"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请时间</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="applytime" name="applytime" value="${item.applytime}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table table-bordered" id="para_table">
+                        <tr>
+                            <th style="text-align:center" colspan="2">行程起</th>
+                            <th style="text-align:center" colspan="2">行程止</th>
+                            <th style="text-align:center" rowspan="2">主要目的及具体工作安排</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">时间</th>
+                            <th style="text-align:center">地点</th>
+                            <th style="text-align:center">时间</th>
+                            <th style="text-align:center">地点</th>
+                        </tr>
+                        @for(var i=0;i<reimburseTravelPathList.~size;i++){
+                        <tr class="travelContent" id="${i}">
+                            <input type="hidden" id="id" value="${reimburseTravelPathList[i].id}">
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" readonly="readonly" id="fromtime" name="fromtime${i}" value="${reimburseTravelPathList[i].fromtime}">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" readonly="readonly" type="text" id="fromlocation" name="fromlocation${i}" value="${reimburseTravelPathList[i].fromlocation}"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" readonly="readonly" type="text" id="totime" name="totime${i}" value="${reimburseTravelPathList[i].totime}"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" readonly="readonly" type="text" id="tolocation" name="tolocation${i}" value="${reimburseTravelPathList[i].tolocation}"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" readonly="readonly" type="text" id="target" name="target${i}" value="${reimburseTravelPathList[i].target}"/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @}
+                    </table>
+                </div>
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">住宿(元)</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly="readonly" type="text" id="accommodationfee" name="accommodationfee" value="${item.accommodationfee}" onblur="TravelReimburseInfoDlg.countTotal();return false;"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">天数</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly="readonly" type="text" id="traveldays" name="traveldays" value="${item.traveldays}" onblur="TravelReimburseInfoDlg.countSubsidy();return false;"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">交通方式</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${travelMethod}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">其他(元)</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly="readonly" type="text" id="othercash" name="othercash" value="${item.othercash}" onblur="TravelReimburseInfoDlg.countTotal();return false;"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="ticketnums" readonly="readonly" name="单据张数" value="${item.ticketnums}" underline="true"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">预借现金(元)</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly="readonly" type="text" id="applycash" name="applycash" value="${item.applycash}" onblur="TravelReimburseInfoDlg.countAdjustCash();return false;"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">部门负责人(${leaderapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "leader_approve"){
+                                <input class="form-control" type="text" id="leadernote" name="leadernote"/>
+                            @} else {
+                                <input class="form-control" readonly="readonly" type="text" id="leadernote" value="${item.leadernote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">副总经理(${deputyapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "deputyManager_approve"){
+                            <input class="form-control" type="text" id="deputynote" name="deputynote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="deputynote" value="${item.deputynote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">市内交通(元)</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly="readonly" type="text" id="trafficfee" name="trafficfee" value="${item.trafficfee}" onblur="TravelReimburseInfoDlg.countTotal();return false;"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="subsidy" name="出差补助(85元/天)" readonly="readonly" value="${item.subsidy}" underline="true"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">交通费(元)</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" readonly="readonly" type="text" id="travelfee" name="travelfee" value="${item.travelfee}" onblur="TravelReimburseInfoDlg.countTotal();return false;"/>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="totalfee" name="小计(元)" readonly="readonly" value="${item.totalfee}" underline="true"/>
+                    <#input id="upperfee" name="金额大写" readonly="readonly" value="${item.upperfee}"  underline="true"/>
+                    <#input id="adjustcash" name="退/补金额(元)" readonly="readonly" value="${item.adjustcash}" readonly="readonly" underline="true"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">财务(${casherapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "finance_cq_approve" || taskDefinitionKey == "finance_bj_approve" || taskDefinitionKey == "finance_approve"){
+                            <input class="form-control" type="text" id="cashernote" name="cashernote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="cashernote"  value="${item.cashernote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">总经理(${managerapprove})审批意见</label>
+                        <div class="col-sm-9">
+                            @if(taskDefinitionKey == "manager_approve"){
+                            <input class="form-control" type="text" id="managernote" name="managernote"/>
+                            @} else {
+                            <input class="form-control" readonly="readonly" type="text" id="managernote" value="${item.managernote}"/>
+                            @}
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 这是部门选择的下拉框 -->
+        <div id="menuContent" class="menuContent"
+             style="display: none; position: absolute; z-index: 200;">
+            <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+        </div>
+        <div class="row btn-group-m-t">
+            <div class="col-sm-10">
+                <#button btnCss="info" name="同意" id="ensure" icon="fa-check" clickFun="ProcessInfoDlg.pass()"/>
+                <#button btnCss="danger" name="驳回" id="ensure" icon="fa-eraser" clickFun="ProcessInfoDlg.unPass()"/>
+                <#button btnCss="danger" name="关闭" id="cancel" icon="fa-eraser" clickFun="ProcessInfoDlg.goBack()"/>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="${ctxPath}/static/modular/biz/reimburse/process/process_travel_info.js"></script>
+@}

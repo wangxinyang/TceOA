@@ -1,0 +1,134 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="consumeReimburseForm">
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="assigneeValue" value="${item.assignee}">
+            <input type="hidden" id="locationValue" value="${item.location}">
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#select id="location" name="地区" underline="true" required="true">
+                        <option value='1'>重庆</option>
+                        <option value='2'>北京</option>
+                    </#select>
+                </div>
+                <div class="col-sm-6">
+                    <#input name="部门" id="departs" readonly="readonly" hidden="deptid"
+                    clickFun="ConsumeReimburseInfoDlg.showDeptSelectTree(); return false;"
+                    style="background-color: #ffffff !important;" underline="true" required="true"
+                    value="${deptname}" hiddenValue="${item.deptid}"/>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-bordered" id="para_table">
+                    <tr>
+                        <th style="text-align:center">科目</th>
+                        <th style="text-align:center">项目名称</th>
+                        <th style="text-align:center">项目编号</th>
+                        <th style="text-align:center">资金用途</th>
+                        <th style="text-align:center">报销金额</th>
+                        <th style="text-align:center">关联采购申请<br/>费用申请单号</th>
+                        <th style="text-align:center">操作</th>
+                    </tr>
+                    @for(var i=0;i<consumeDetailVoList.~size;i++){
+                    <tr class="consumeContent" id="${i}">
+                        <input type="hidden" id="id" value="${consumeDetailVoList[i].id}">
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="subject" name="subject${i}" type="text" value="${consumeDetailVoList[i].subjectname}" readonly="readonly" onclick="ConsumeReimburseInfoDlg.showSubjectSelectTree(this); return false;" style="background-color: #ffffff !important;">
+                                    <input class="form-control" type="hidden" id="subjectid" name="subjectid${i}" value="${consumeDetailVoList[i].subjectid}">
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <select class='form-control' data-live-search="false" id='project' name='project${i}'>
+                                    </select>
+                                </div>
+                            </div>
+                            <input class="form-control" type="hidden" id="projectid" name='projectid${i}' value="${consumeDetailVoList[i].projectid}"/>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="code" name="code${i}" readonly="readonly" value="${consumeDetailVoList[i].code}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="cashuse" name="cashuse${i}" value="${consumeDetailVoList[i].cashuse}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="cash" name="cash${i}" value="${consumeDetailVoList[i].cash}" onchange="ConsumeReimburseInfoDlg.countTotal(this);return false;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="reqno" name="reqno${i}" value="${consumeDetailVoList[i].reqno}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <#button type="button" icon="fa-minus" name="删除" clickFun="ConsumeReimburseInfoDlg.deleteRow(this, 'delete', ${consumeDetailVoList[i].id})"/>
+                        </td>
+                    </tr>
+                    @}
+                </table>
+                <div id="addtrdiv" style="margin-top:-15px; width: 15%; float: right;">
+                    <#button btnCss="primary" icon="fa-plus" name="添加" clickFun="ConsumeReimburseInfoDlg.addRow()"/>
+                </div>
+            </div>
+            <div class="col-sm-6 b-r">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">预借现金(元)</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" id="applycash" name="applycash" value="${item.applycash}" onblur="ConsumeReimburseInfoDlg.countAdjustCash();return false;"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <#input id="adjustcash" name="退/补金额(元)" readonly="readonly" value="${item.adjustcash}" underline="true"/>
+            </div>
+            <div class="col-sm-6">
+                <#input id="totalfee" name="小计(元)" readonly="readonly" value="${item.totalfee}" underline="true"/>
+                <div class="form-group required">
+                    <label class="col-sm-3 control-label">审批人</label>
+                    <div class="col-sm-9">
+                        <select class='form-control selectpicker' data-live-search="true" id='assignee' name='assignee'>
+                        </select>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+            </div>
+            <!-- 这是部门选择的下拉框 -->
+            <div id="menuContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+            </div>
+            <!-- 这是科目选择的下拉框 -->
+            <div id="subjectContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="treeSubjectDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="保存" id="ensure" icon="fa-check" clickFun="ConsumeReimburseInfoDlg.editSubmit()"/>
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ConsumeReimburseInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ConsumeReimburseInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/reimburse/consume/consumeReimburse_info.js"></script>
+@}

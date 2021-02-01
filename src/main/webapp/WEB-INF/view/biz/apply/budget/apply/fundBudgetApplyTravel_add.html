@@ -1,0 +1,149 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="travelInfoForm">
+
+            <input type="hidden" id="id" value="">
+            <div class="row">
+                <div class="col-sm-3">
+                    <#select id="location" name="地区">
+                        <option value="1">重庆</option>
+                        <option value="2">北京</option>
+                    </#select>
+                </div>
+                <div class="col-sm-3">
+                    <#input name="部门" id="departs" readonly="readonly" hidden="deptid"
+                    clickFun="FundBudgetApplyTravelInfoDlg.showDeptSelectTree(); return false;"
+                    style="background-color: #ffffff !important;"/>
+                </div>
+                <div class="col-sm-15">
+                    <table class="table table-bordered" id="para_table">
+                        <tr>
+                            <th style="text-align:center">科目</th>
+                            <th style="text-align:center">项目名称</th>
+                            <th style="text-align:center">员工姓名</th>
+                            <th style="text-align:center">出差目的地</th>
+                            <th style="text-align:center">预计出差天数</th>
+                            <th style="text-align:center">长途交通费(元)</th>
+                            <th style="text-align:center">站点（机场、高铁等）<br/>往返交通费(元)</th>
+                            <th style="text-align:center">住宿费(元)</th>
+                            <th style="text-align:center">补贴(元)</th>
+                            <th style="text-align:center">预算金额(元)</th>
+                            <th style="text-align:center">资金使用用途说明及核算标准</th>
+                            <th style="text-align:center">操作</th>
+                        </tr>
+                        <tr class="travelContent" id="0">
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" id="subject" name="subject0" type="text" readonly="readonly" onclick="FundBudgetApplyTravelInfoDlg.showSubjectSelectTree(this); return false;" style="background-color: #ffffff !important;">
+                                        <input class="form-control" type="hidden" id="subjectid" name="subjectid0">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <select class='form-control' id="project" name="project0">
+                                        </select>
+                                        <input class="form-control" type="hidden" id="projectid" name="projectid0"/>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="empname" name="empname0"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="traveldest" name="traveldest0"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="traveldays" value="0" name="traveldays0" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="travelfee" value="0" name="travelfee0" value="0" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="trafficfee" value="0" name="trafficfee0" value="0" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="accommodationfee" value="0" name="accommodationfee0" value="0" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="subsidy" value="0" name="subsidy0" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="totalfee" value="0" name="totalfee0" readonly="readonly"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <input class="form-control" type="text" id="description" name="description0"/>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-6">
+                                <#button type="button" icon="fa-minus" name="删除" clickFun="FundBudgetApplyTravelInfoDlg.deleteRow(this, 'add', 0)"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                    <div id="addtrdiv" style="margin-top:-15px; width: 15%; float: right;">
+                        <#button btnCss="primary" icon="fa-plus" name="添加" clickFun="FundBudgetApplyTravelInfoDlg.addRow()"/>
+                    </div>
+                </div>
+                <!-- 这是部门选择的下拉框 -->
+                <div id="menuContent" class="menuContent"
+                     style="display: none; position: absolute; z-index: 200;">
+                    <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+                </div>
+                <!-- 这是科目选择的下拉框 -->
+                <div id="subjectContent" class="menuContent"
+                     style="display: none; position: absolute; z-index: 200;">
+                    <ul id="treeSubjectDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+                </div>
+                <div class="row btn-group-m-t">
+                    <div class="col-sm-10">
+                        <#button btnCss="primary" name="保存申请" id="ensure" icon="fa-check" clickFun="FundBudgetApplyTravelInfoDlg.saveSubmit()"/>
+                        <#button btnCss="info" name="提交流程" id="ensure" icon="fa-check" clickFun="FundBudgetApplyTravelInfoDlg.addSubmit()"/>
+                        <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="FundBudgetApplyTravelInfoDlg.goBack()"/>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/budget/apply/fundBudgetApplyTravel_info.js"></script>
+@}

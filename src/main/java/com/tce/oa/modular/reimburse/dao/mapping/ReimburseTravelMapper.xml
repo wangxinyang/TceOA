@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tce.oa.modular.reimburse.dao.ReimburseTravelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tce.oa.modular.reimburse.model.ReimburseTravel">
+        <id column="id" property="id" />
+        <result column="reimburseno" property="reimburseno" />
+        <result column="deptid" property="deptid" />
+        <result column="location" property="location" />
+        <result column="position" property="position" />
+        <result column="applytime" property="applytime" />
+        <result column="projetid" property="projectid" />
+        <result column="travelreason" property="travelreason" />
+        <result column="accommodationfee" property="accommodationfee" />
+        <result column="trafficfee" property="trafficfee" />
+        <result column="traveldays" property="traveldays" />
+        <result column="subsidy" property="subsidy" />
+        <result column="travelmethod" property="travelmethod" />
+        <result column="travelfee" property="travelfee" />
+        <result column="othercash" property="othercash" />
+        <result column="totalfee" property="totalfee" />
+        <result column="ticketnums" property="ticketnums" />
+        <result column="upperfee" property="upperfee" />
+        <result column="applycash" property="applycash" />
+        <result column="adjustcash" property="adjustcash" />
+        <result column="assignee" property="assignee" />
+        <result column="usernote" property="usernote" />
+        <result column="leadernote" property="leadernote" />
+        <result column="leadertime" property="leadertime" />
+        <result column="cashernote" property="cashernote" />
+        <result column="cashertime" property="cashertime" />
+        <result column="deputynote" property="deputynote" />
+        <result column="deputytime" property="deputytime" />
+        <result column="managernote" property="managernote" />
+        <result column="managertime" property="managertime" />
+        <result column="state" property="state" />
+        <result column="userid" property="userid" />
+        <result column="processId" property="processId" />
+        <result column="createtime" property="createtime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, reimburseno, deptid, location, position, applytime, projectid, travelreason, accommodationfee, trafficfee, traveldays,
+        subsidy, travelmethod, travelfee, othercash, totalfee, ticketnums, upperfee, applycash, adjustcash, assignee, usernote,
+        leadernote, leadertime, cashernote, cashertime, deputynote, deputytime, managernote, managertime, state, userid, processId, createtime
+    </sql>
+
+    <select id="getReimburseTravels" resultType="map">
+        select id, reimburseno, userid, location, deptid, totalfee, createtime, state from biz_reimburse_travel where 1 = 1
+        <if test="beginTime != null and beginTime !='' and endTime != null and endTime != ''">
+            and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+        <if test="deptid != null and deptid !=''">
+            and deptid = #{deptid}
+        </if>
+        <if test="state != null and state !=''">
+            and state = #{state}
+        </if>
+        <if test="ids != null">
+            and userid in
+            <foreach collection="ids" item="userid" open="(" close=")" separator=",">
+                #{userid}
+            </foreach>
+        </if>
+        order by createtime DESC
+    </select>
+</mapper>

@@ -1,0 +1,151 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal"  id="travelInfoForm">
+            <input type="hidden" id="type" value="${type}">
+            <input type="hidden" id="aid" value="${aid}">
+            <input type="hidden" id="deptid" value="${deptid}">
+            <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">地区:</label>
+                            <label class="col-sm-3 control-label">
+                                ${locationName}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">部门:</label>
+                            <label class="col-sm-3 control-label">
+                                ${deptname}
+                            </label>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-sm-12">
+                <table class="table table-bordered" id="para_table">
+                    <tr>
+                        <th style="text-align:center">科目</th>
+                        <th style="text-align:center">项目名称</th>
+                        <th style="text-align:center">员工姓名</th>
+                        <th style="text-align:center">出差目的地</th>
+                        <th style="text-align:center">预计出差天数</th>
+                        <th style="text-align:center">长途交通费</th>
+                        <th style="text-align:center">站点（机场、高铁等）<br/>往返交通费</th>
+                        <th style="text-align:center">住宿费</th>
+                        <th style="text-align:center">补贴</th>
+                        <th style="text-align:center">预算金额</th>
+                        <th style="text-align:center">资金使用用途说明及核算标准</th>
+                        <th style="text-align:center">操作</th>
+                    </tr>
+                    @for(var i=0;i<fundApplys.~size;i++){
+                    <tr class="travelContent" id="${i}">
+                        <input type="hidden" id="id" value="${fundApplys[i].id}">
+                        <td title='${fundApplys[i].subjectname}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" id="subject" name="subject${i}" type="text" readonly="readonly" value="${fundApplys[i].subjectname}" onclick="FundBudgetApplyTravelInfoDlg.showSubjectSelectTree(this); return false;" style="background-color: #ffffff !important;">
+                                    <input class="form-control" type="hidden" id="subjectid" name="subjectid${i}">
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].projectname}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <select class='form-control' id="project" name="project${i}">
+                                    </select>
+                                    <input class="form-control" type="hidden" id="projectid" name="projectid${i}" value="${fundApplys[i].projectid}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].empname}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="empname" name="empname${i}" value="${fundApplys[i].empname}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].traveldest}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="traveldest" name="traveldest${i}" value="${fundApplys[i].traveldest}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].traveldays}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="traveldays" name="traveldays${i}" value="${fundApplys[i].traveldays}" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].travelfee}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="travelfee" name="travelfee${i}" value="${fundApplys[i].travelfee}" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].trafficfee}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="trafficfee" name="trafficfee${i}" value="${fundApplys[i].trafficfee}" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].accommodationfee}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="accommodationfee" name="accommodationfee${i}" value="${fundApplys[i].accommodationfee}" onblur="FundBudgetApplyTravelInfoDlg.countTotal(this);return false;"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].subsidy}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="subsidy" name="subsidy${i}" value="${fundApplys[i].subsidy}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].totalfee}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="totalfee" name="totalfee${i}" value="${fundApplys[i].totalfee}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td title='${fundApplys[i].description}' class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="description" name="description${i}" value="${fundApplys[i].description}"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <#button type="button" icon="fa-minus" name="删除" clickFun="FundBudgetApplyTravelInfoDlg.deleteRow(this, 'delete', ${fundApplys[i].id})"/>
+                        </td>
+                    </tr>
+                    @}
+                </table>
+            </div>
+            <div id="addtrdiv" style="margin-top:-15px; width: 15%; float: right;">
+                <#button btnCss="primary" icon="fa-plus" name="添加" clickFun="FundBudgetApplyTravelInfoDlg.addRow()"/>
+            </div>
+            <!-- 这是科目选择的下拉框 -->
+            <div id="subjectContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="treeSubjectDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="primary" name="保存申请" id="ensure" icon="fa-check" clickFun="FundBudgetApplyTravelInfoDlg.editSubmit()"/>
+                    <#button btnCss="info" name="提交流程" id="ensure" icon="fa-check" clickFun="FundBudgetApplyTravelInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="FundBudgetApplyTravelInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/budget/apply/fundBudgetApplyTravel_info.js"></script>
+@}

@@ -1,0 +1,73 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="costPaymentForm">
+            <input type="hidden" id="id" value="${item.id}">
+            <input type="hidden" id="assigneeValue" value="${item.assignee}">
+            <input type="hidden" id="locationValue" value="${item.location}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#select id="location" name="地区" underline="true" required="true">
+                        <option value='1'>重庆</option>
+                        <option value='2'>北京</option>
+                    </#select>
+                    <div class="form-group required">
+                        <label class="col-sm-3 control-label">申请日期</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="applytime" name="applytime" value="${item.applytime}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="bank" name="开户行" required="true" underline="true" value="${item.bank}"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">截止日期</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="deadline" name="deadline" value="${item.deadline}">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="price" name="金额" underline="true" required="true" value="${item.price}"/>
+                </div>
+                <div class="col-sm-6">
+                    <#input name="部门" id="departs" readonly="readonly" hidden="deptid"
+                    clickFun="CostPaymentApplyInfoDlg.showDeptSelectTree(); return false;"
+                    style="background-color: #ffffff !important;" underline="true" required="true" value="${deptname}" hiddenValue="${item.deptid}"/>
+                    <#input id="receivingunit" name="收款单位(员工姓名)" required="true" underline="true" value="${item.receivingunit}"/>
+                    <#input id="account" name="账号" underline="true" required="true" value="${item.account}"/>
+                    <#input id="reason" name="申请事由" underline="true" required="true" value="${item.reason}"/>
+                    <div class="form-group required">
+                        <label class="col-sm-3 control-label">审批人</label>
+                        <div class="col-sm-9">
+                            <select class='form-control selectpicker' data-live-search="false" id='assignee' name='assignee'>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 这是部门选择的下拉框 -->
+            <div id="menuContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+            </div>
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="保存" id="ensure" icon="fa-check" clickFun="CostPaymentApplyInfoDlg.editSubmit()"/>
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="CostPaymentApplyInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="CostPaymentApplyInfoDlg.goBack()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/cost/payment/costPaymentApply_info.js"></script>
+<script>
+    laydate.render({
+        elem: '#applytime'
+    });
+    laydate.render({
+        elem: '#deadline'
+    });
+</script>
+@}

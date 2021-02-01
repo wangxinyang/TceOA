@@ -1,0 +1,60 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>资金预算管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#SelectCon id="applyType" name="预算类型" >
+                                    <option value="0">全部</option>
+                                    <option value="1">业务预算申请</option>
+                                    <option value="2">差旅费预算申请</option>
+                                    <option value="3">采购预算申请</option>
+                                    <option value="4">其它预算申请</option>
+                                </#SelectCon>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <#TimeCon id="beginTime" name="申请开始日期" isTime="false"/>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <#TimeCon id="endTime" name="申请结束日期" isTime="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <#button name="搜索" icon="fa-search" clickFun="FundAmount.search()"/>
+                                        <#button name="重置" icon="fa-trash" clickFun="FundAmount.resetSearch()" space="true"/>
+                                        @if(shiro.hasPermission("/fund/amount/update")){
+                                        <#button name="修改" icon="fa-edit" clickFun="FundAmount.openFundAmountDetailUpdate()" space="true"/>
+                                        @}
+                                        <#button name="导出汇总数据" icon="fa-edit" clickFun="FundAmount.export()" space="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                        <#table id="fundAmountTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/budget/amount/fundAmount.js"></script>
+<script>
+    laydate.render({
+        elem: '#beginTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+</script>
+@}

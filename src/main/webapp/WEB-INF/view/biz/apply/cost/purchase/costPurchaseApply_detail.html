@@ -1,0 +1,232 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="costPurchaseForm">
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">地区</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${locationName}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">项目名称</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" value="${projectName}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <#input id="receivingunit" name="收款单位(员工姓名)" readonly="readonly" underline="true" value="${item.receivingunit}"/>
+                    <#input id="account" name="账号" underline="true" readonly="readonly" value="${item.account}"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">申请日期</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="applytime" name="applytime" value="${item.applytime}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="col-sm-6">
+                    <#input name="部门" id="departs" readonly="readonly" hidden="deptid"
+                    clickFun="CostPurchaseApplyInfoDlg.showDeptSelectTree(); return false;"
+                    style="background-color: #ffffff !important;" underline="true"
+                    value="${deptname}" hiddenValue="${item.deptid}" />
+                    <#input id="code" name="项目编号" readonly="readonly" underline="true" value="${code}"/>
+                    <#input id="bank" name="开户行" readonly="readonly" underline="true" value="${item.bank}"/>
+                    <#input id="use" name="用途" underline="true"  value="${item.use}" readonly="readonly"/>
+                    <#input id="countfee" name="采购总价(元)" underline="true" readonly="readonly"/>
+                </div>
+            </div>
+        <div class="col-sm-12">
+            <table class="table table-bordered" id="confirm_table">
+                <caption align="top">采购商品确认报价</caption>
+                <tr>
+                    <th style="text-align:center">商品名称</th>
+                    <th style="text-align:center">规格型号</th>
+                    <th style="text-align:center">数量</th>
+                    <th style="text-align:center">预计单价(元)</th>
+                    <th style="text-align:center">预计总价(元)</th>
+                    <th style="text-align:center">供应商</th>
+                    <th style="text-align:center">备注</th>
+                </tr>
+                @for(var i=0;i<purchaseGoodsConfirmList.~size;i++){
+                    <tr class="confirmContent" id="${i}">
+                        <input type="hidden" id="id" value="${purchaseGoodsConfirmList[i].id}">
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="goods" name="goods${i}" value="${purchaseGoodsConfirmList[i].goods}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="type" name="type${i}" value="${purchaseGoodsConfirmList[i].type}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="num" name="num${i}"
+                                           onblur="CostPurchaseApplyInfoDlg.countTotal(this);return false;" value="${purchaseGoodsConfirmList[i].num}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="price" name="price${i}"
+                                           onblur="CostPurchaseApplyInfoDlg.countTotal(this);return false;" value="${purchaseGoodsConfirmList[i].price}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="totalfee" name="totalfee${i}" readonly="readonly" value="${purchaseGoodsConfirmList[i].totalfee}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="supplier" name="supplier${i}" value="${purchaseGoodsConfirmList[i].supplier}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="note" name="note${i}" value="${purchaseGoodsConfirmList[i].note}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @}
+            </table>
+        </div>
+        <div class="col-sm-12">
+            @ if(purchaseGoodsInquiryList.~size == 0) {
+                <table class="table table-bordered" id="inquiry_table" style="display: none">
+            @} else {
+                <table class="table table-bordered" id="inquiry_table">
+            @}
+                <caption align="top">采购商品询价</caption>
+                <tr>
+                    <th style="text-align:center">商品名称</th>
+                    <th style="text-align:center">规格型号</th>
+                    <th style="text-align:center">数量</th>
+                    <th style="text-align:center">预计单价(元)</th>
+                    <th style="text-align:center">预计总价(元)</th>
+                    <th style="text-align:center">报价单位</th>
+                    <th style="text-align:center">备注</th>
+                </tr>
+                @for(var i=0;i<purchaseGoodsInquiryList.~size;i++){
+                    <tr class="inquiryContent" id="${i}">
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="goods" name="inquiry_goods${i}" value="${purchaseGoodsInquiryList[i].goods}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="type" name="inquiry_type${i}" value="${purchaseGoodsInquiryList[i].type}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="num" name="inquiry_num${i}"
+                                           onblur="CostPurchaseApplyInfoDlg.countInquiryTotal(this);return false;" value="${purchaseGoodsInquiryList[i].num}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="price" name="inquiry_price${i}"
+                                           onblur="CostPurchaseApplyInfoDlg.countInquiryTotal(this);return false;" value="${purchaseGoodsInquiryList[i].price}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="totalfee" name="inquiry_totalfee${i}" readonly="readonly" value="${purchaseGoodsInquiryList[i].totalfee}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="quotationunit" name="inquiry_quotationunit${i}" value="${purchaseGoodsInquiryList[i].quotationunit}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <input class="form-control" type="text" id="note" name="inquiry_note${i}" value="${purchaseGoodsInquiryList[i].note}" readonly="readonly"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @}
+            </table>
+        </div>
+        <div class="col-sm-6 b-r">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">部门负责人审批意见</label>
+                <div class="col-sm-9">
+                    <input class="form-control" readonly="readonly" type="text" id="leadernote" name="leadernote" value="${item.leadernote}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">财务审批意见</label>
+                <div class="col-sm-9">
+                    <input class="form-control" readonly="readonly" type="text" id="cashernote" name="cashernote" value="${item.cashernote}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">总经理审批意见</label>
+                <div class="col-sm-9">
+                    <input class="form-control" readonly="readonly" type="text" id="managernote" name="managernote" value="${item.managernote}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">行政人事审批意见</label>
+                <div class="col-sm-9">
+                    <input class="form-control" readonly="readonly" type="text" id="assistantnote" name="assistantnote" value="${item.assistantnote}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">副总经理审批意见</label>
+                <div class="col-sm-9">
+                    <input class="form-control" readonly="readonly" type="text" id="deputynote" name="deputynote" value="${item.deputynote}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+        </div>
+        <div class="row btn-group-m-t">
+            <div class="col-sm-10">
+                <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="CostPurchaseApplyInfoDlg.goBack()"/>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/biz/apply/cost/purchase/costPurchaseApply_info.js"></script>
+@}
